@@ -1,0 +1,13 @@
+fastapi
+gradio
+uvicorn
+pymupdf
+spacy
+scikit-learn
+sentence-transformers
+rapidfuzz
+pandas
+numpy
+python-multipart
+pydantic
+pytest
