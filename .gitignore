@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Environment
+.env
+.env.local
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+
+# Data uploaded at runtime, never commit real candidate files
+backend/data/uploads/
+
+# Model caches
+*.safetensors
+.cache/
+
+# OS
+.DS_Store
+
+# history 
+.history/
