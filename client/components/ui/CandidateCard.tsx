@@ -1,3 +1,4 @@
+// client/components/ui/CandidateCard.tsx
 "use client";
 
 import { useState } from "react";
@@ -26,7 +27,11 @@ export function CandidateCard({ candidate }: { candidate: CandidateRecord }) {
         <div className="min-w-0">
           <span className="text-xs font-medium text-muted">#{candidate.rank}</span>
           <p className="mt-1 truncate text-sm font-semibold">{candidate.name}</p>
-          <p className="truncate text-xs text-muted">{candidate.source_file}</p>
+          {candidate.name_source === "filename" ? (
+            <p className="truncate text-xs text-muted">Name not detected, showing filename</p>
+          ) : (
+            <p className="truncate text-xs text-muted">{candidate.source_file}</p>
+          )}
         </div>
         {failed ? (
           <AlertTriangle className="h-5 w-5 shrink-0 text-danger" />

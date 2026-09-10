@@ -1,3 +1,4 @@
+# server/app/api/job_description.py
 """
 F 05: Job Description Processing
 Endpoints that accept a job description either as typed text or as an
@@ -13,6 +14,7 @@ from app.models.schemas import JobDescriptionRequest, JobDescriptionResult
 router = APIRouter()
 MIN_CHARS = 100
 ALLOWED_UPLOAD_TYPES = {"application/pdf", "text/plain"}
+MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024  # 5 MB, a job description has no business being larger
 
 
 def _validate_and_process(text: str) -> JobDescriptionResult:
@@ -40,6 +42,11 @@ async def upload_job_description(file: UploadFile = File(...)):
     contents = await file.read()
     if len(contents) == 0:
         raise HTTPException(status_code=400, detail="Uploaded file is empty")
+    if len(contents) > MAX_FILE_SIZE_BYTES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"File exceeds the {MAX_FILE_SIZE_BYTES // (1024 * 1024)}MB size limit",
+        )
 
     if file.content_type == "application/pdf":
         text, status = extraction.extract_text_from_pdf(contents)

@@ -1,12 +1,15 @@
+# server/app/models/schemas.py
 from pydantic import BaseModel, Field
 from typing import List, Literal
 
 ExtractionStatus = Literal["ok", "empty_text", "parse_error"]
+NameSource = Literal["extracted", "filename"]
 
 
 class CandidateRecord(BaseModel):
     candidate_id: str
     name: str
+    name_source: NameSource
     source_file: str
     extraction_status: ExtractionStatus
     raw_text_chars: int

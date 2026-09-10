@@ -1,3 +1,4 @@
+# server/app/src/pipeline.py
 """
 Orchestration layer.
 Holds the in memory candidate and job description store, and wires
@@ -20,9 +21,68 @@ JOB_DESCRIPTION_STORE: Optional[dict] = None
 def new_candidate_id() -> str:
     return f"cand_{uuid.uuid4().hex[:8]}"
 
+NAME_HEADER_BLOCKLIST = {
+    "resume", "curriculum vitae", "cv", "biodata", "profile",
+    "contact", "contact information", "objective", "summary",
+    "personal details", "career objective", "professional summary",
+}
+
+
+def _looks_like_a_name(line: str) -> Optional[str]:
+    """Heuristic pass: a line that is ONLY a name (e.g. 'Jane Doe' sitting
+    alone at the top of a resume) is the most common and most reliable
+    signal, so we check for it before reaching for NER."""
+    if not line or len(line) > 40:
+        return None
+    words = line.split()
+    if not (1 < len(words) <= 4):
+        return None
+    if any(ch.isdigit() for ch in line) or "@" in line:
+        return None
+    if all(w[:1].isupper() and w[1:].islower() for w in words if w.isalpha()):
+        return line
+    return None
+
+
+def extract_candidate_name(raw_text: str, nlp) -> Optional[str]:
+    """
+    Best-effort candidate name extraction from the top of a resume.
+    Tries a title-case heuristic on the first few non-empty lines first
+    (catches the common case where the name sits alone at the top),
+    then falls back to spaCy's PERSON entity recognizer run line by line
+    for messier headers. Returns None if nothing trustworthy is found,
+    so the caller falls back to the filename.
+    """
+    lines = [l.strip() for l in raw_text.splitlines() if l.strip()][:6]
+
+    for line in lines:
+        if line.lower() in NAME_HEADER_BLOCKLIST:
+            continue
+        name = _looks_like_a_name(line)
+        if name:
+            return name
+
+    for line in lines:
+        if line.lower() in NAME_HEADER_BLOCKLIST or "@" in line or any(ch.isdigit() for ch in line):
+            continue
+        doc = nlp(line)
+        persons = [ent.text for ent in doc.ents if ent.label_ == "PERSON"]
+        if persons:
+            return persons[0]
+
+    return None
+
+
 def process_resume(candidate_id: str, filename: str, file_bytes: bytes) -> dict:
     nlp = get_nlp()
     raw_text, status = extraction.extract_text_from_pdf(file_bytes)
+
+    # Name extraction happens on the pre-clean text, while line breaks
+    # still exist, since clean_text() collapses all whitespace to single
+    # spaces (see below) and would destroy the line structure this relies on.
+    extracted_name = extract_candidate_name(raw_text, nlp) if status == "ok" else None
+    name = extracted_name or filename.rsplit(".", 1)[0]
+    name_source = "extracted" if extracted_name else "filename"
 
     # F-03: normalize whitespace and bullet glyphs before anything downstream
     # sees this text. We deliberately stop at clean_text() here rather than
@@ -37,7 +97,8 @@ def process_resume(candidate_id: str, filename: str, file_bytes: bytes) -> dict:
 
     record = {
         "candidate_id": candidate_id,
-        "name": filename.rsplit(".", 1)[0],
+        "name": name,
+        "name_source": name_source,
         "source_file": filename,
         "extraction_status": status,
         "raw_text_chars": len(raw_text),
@@ -109,6 +170,7 @@ def run_scoring() -> List[dict]:
         results.append({
             "candidate_id": candidate_id,
             "name": record["name"],
+            "name_source": record["name_source"],
             "source_file": record["source_file"],
             "extraction_status": record["extraction_status"],
             "raw_text_chars": record["raw_text_chars"],
@@ -140,6 +202,7 @@ def run_scoring() -> List[dict]:
             results.append({
                 "candidate_id": candidate_id,
                 "name": record["name"],
+                "name_source": record["name_source"],
                 "source_file": record["source_file"],
                 "extraction_status": record["extraction_status"],
                 "raw_text_chars": record["raw_text_chars"],

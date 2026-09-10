@@ -1,8 +1,11 @@
+// client/lib/types.ts
 export type ExtractionStatus = "ok" | "empty_text" | "parse_error";
+export type NameSource = "extracted" | "filename";
 
 export interface CandidateRecord {
   candidate_id: string;
   name: string;
+  name_source: NameSource;
   source_file: string;
   extraction_status: ExtractionStatus;
   raw_text_chars: number;
