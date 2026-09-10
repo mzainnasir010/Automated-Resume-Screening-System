@@ -2,16 +2,21 @@
 FastAPI (gradio.Server) entry point. Wires up the API routes and starts the app. Run locally with: python -m app.main
 """
 
+import os
+from dotenv import load_dotenv
 from gradio import Server
 import gradio as gr
 from fastapi.middleware.cors import CORSMiddleware
 from app.api import upload, job_description, score
 
+load_dotenv()
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+
 app = Server()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[FRONTEND_URL],
     allow_methods=["*"],
     allow_headers=["*"],
 )
