@@ -8,16 +8,20 @@ interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 const tones: Record<Tone, string> = {
-  matched: "bg-success/10 text-success border-success/20",
-  missing: "bg-warning/10 text-warning border-warning/20",
-  neutral: "bg-surface-hover text-muted border-border",
+  matched: "bg-success text-white",
+  missing: "bg-warning text-white",
+  neutral: "bg-surface-hover text-muted",
 };
 
-export function Badge({ tone = "neutral", className, ...props }: BadgeProps) {
+export function Badge({
+  tone = "neutral",
+  className,
+  ...props
+}: BadgeProps) {
   return (
     <span
       className={clsx(
-        "inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium",
+        "inline-flex items-center rounded-md px-2.5 py-1 text-[11px] font-semibold",
         tones[tone],
         className
       )}
