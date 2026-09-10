@@ -27,40 +27,40 @@ Recruiters often receive hundreds of applications for a single open role. Manual
 
 ## 4. Features
 
-### F-01 — Resume Upload
+### F-01: Resume Upload
 - Support for uploading multiple PDF files simultaneously.
 - Graceful error handling for unsupported file types.
 
-### F-02 — Text Extraction
+### F-02: Text Extraction
 - Robust PDF parsing capable of handling multi-page and standard multi-column layouts.
 
-### F-03 — NLP Processing
+### F-03: NLP Processing
 - Text cleaning, lowercasing, and whitespace normalisation.
 - Tokenisation, stop-word removal, and lemmatization using NLP pipelines.
 - Preservation of important technical tokens (e.g., C++, .NET, Node.js).
 
-### F-04 — Skill Extraction
+### F-04: Skill Extraction
 - Extraction of technical skills, frameworks, and tools.
 - Resolution of skill aliases to canonical names (e.g., matching "JS" to "JavaScript") using fuzzy matching.
 
-### F-05 — Job Description Processing
+### F-05: Job Description Processing
 - Accepts typed or pasted job descriptions.
 - Extracts core required skills and competencies from the text for comparison.
 
-### F-06 — Candidate Matching
+### F-06: Candidate Matching
 - Calculates a similarity score by comparing the resume's extracted content with the job description.
 - Uses a hybrid approach involving semantic document similarity and specific skill overlap.
 - Normalises the final score to a percentage (0–100%).
 
-### F-07 — Candidate Ranking
+### F-07: Candidate Ranking
 - Ranks all candidates deterministically from highest score to lowest.
 - Displays both the rank and the match score clearly on the dashboard.
 
-### F-08 — Missing Skills Analysis
+### F-08:  Missing Skills Analysis
 - Identifies **matched skills** present in both the resume and the job description.
 - Highlights required skills that are **not clearly found** in the candidate's resume, avoiding the assumption that the candidate completely lacks them.
 
-### F-09 — Recruiter Dashboard
+### F-09: Recruiter Dashboard
 - An interactive UI showing candidate name, match score, matched skills, not-clearly-found skills, a brief summary, and overall ranking.
 
 ## 5. Architecture
