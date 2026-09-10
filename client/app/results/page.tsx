@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { RotateCcw, SearchX } from "lucide-react";
+import { RotateCcw, SearchX, FilePlus2 } from "lucide-react";
 import { AppShell } from "@/components/ui/AppShell";
 import { CandidateCard } from "@/components/ui/CandidateCard";
 import { Toolbar } from "@/components/ui/Toolbar";
@@ -20,13 +20,20 @@ const cardVariants = { hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 
 
 export default function ResultsPage() {
   const router = useRouter();
-  const { results, setResults, reset } = useScreening();
+  const { results, setResults, reset, files, jobDescription } = useScreening();
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<"score" | "name">("score");
   const [minScore, setMinScore] = useState(0);
 
+  const isMissingData = files.length === 0 || !jobDescription;
+
   useEffect(() => {
+    if (isMissingData) {
+      setLoading(false);
+      return;
+    }
+
     let active = true;
     setLoading(true);
     getRankedResults().then((data) => {
@@ -39,7 +46,7 @@ export default function ResultsPage() {
       active = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isMissingData]);
 
   const filtered = useMemo(() => {
     return results
@@ -57,6 +64,48 @@ export default function ResultsPage() {
     resetSession();
     router.push("/upload");
   };
+
+  if (isMissingData) {
+    return (
+      <AppShell>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold">Ranked Results</h1>
+            <p className="mt-1 text-sm text-muted">Waiting for data</p>
+          </div>
+        </div>
+
+        <motion.div initial="hidden" animate="visible" variants={gridVariants} className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4 opacity-50 pointer-events-none">
+          {[
+            { label: "Total Candidates", value: "0" },
+            { label: "Avg Match Score", value: "0.0%" },
+            { label: "Strong Matches", value: "0" },
+            { label: "Partial Matches", value: "0" },
+          ].map((stat) => (
+            <motion.div key={stat.label} variants={cardVariants}>
+              <Card className="flex h-20 flex-col justify-center px-4">
+                <p className="text-lg font-semibold tabular-nums">{stat.value}</p>
+                <p className="text-xs text-muted">{stat.label}</p>
+              </Card>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <div className="mt-12 flex flex-col items-center justify-center rounded-xl border border-border border-dashed bg-surface/30 py-20 text-center">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent mb-4">
+            <FilePlus2 className="h-6 w-6" />
+          </div>
+          <h2 className="text-lg font-semibold">No data to analyse</h2>
+          <p className="mt-2 max-w-sm text-sm text-muted">
+            You need to upload candidate resumes and provide a job description before we can generate the ranked results.
+          </p>
+          <Button className="mt-6" onClick={() => router.push("/upload")}>
+            Upload Resumes
+          </Button>
+        </div>
+      </AppShell>
+    );
+  }
 
   return (
     <AppShell>

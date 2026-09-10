@@ -2,6 +2,10 @@
 @import "tailwindcss";
 
 @theme {
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-outfit);
+  --font-logo: var(--font-space);
+
   --color-background: #f7faf8;
   --color-surface: #ffffff;
   --color-surface-hover: #eef4f0;
@@ -13,6 +17,10 @@
   --color-success: #16a34a;
   --color-warning: #d97706;
   --color-danger: #dc2626;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
 }
 
 .dark {

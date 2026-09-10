@@ -197,7 +197,7 @@ export function CandidateCard({
                     Missing skills
                   </span>
 
-                  <span className="rounded-full bg-warning px-1.5 py-0.5 text-[10px] font-bold text-white">
+                  <span className="rounded-full bg-danger px-1.5 py-0.5 text-[10px] font-bold text-white">
                     {candidate.skills_missing.length}
                   </span>
                 </div>
@@ -206,7 +206,7 @@ export function CandidateCard({
                   {missingVisible.map((skill) => (
                     <span
                       key={skill}
-                      className="inline-flex items-center rounded-md bg-warning px-2.5 py-1 text-[11px] font-semibold text-white"
+                      className="inline-flex items-center rounded-md bg-danger px-2.5 py-1 text-[11px] font-semibold text-white"
                     >
                       {skill}
                     </span>

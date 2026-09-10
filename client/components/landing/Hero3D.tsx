@@ -91,9 +91,9 @@ function NetworkGroup() {
         </bufferGeometry>
 
         <lineBasicMaterial
-          color="#22c55e"
+          color="#16a34a"
           transparent
-          opacity={0.18}
+          opacity={0.35}
         />
       </lineSegments>
 
@@ -107,11 +107,11 @@ function NetworkGroup() {
         </bufferGeometry>
 
         <pointsMaterial
-          color="#4ade80"
-          size={0.09}
+          color="#15803d"
+          size={0.12}
           sizeAttenuation
           transparent
-          opacity={0.9}
+          opacity={0.95}
         />
       </points>
     </group>

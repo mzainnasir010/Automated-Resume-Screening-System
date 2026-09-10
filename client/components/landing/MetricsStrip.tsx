@@ -26,7 +26,7 @@ function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
 const STATS = [
   { label: "Resumes screened", value: 12400, suffix: "+" },
   { label: "Avg. time saved per hire", value: 6, suffix: " hrs" },
-  { label: "Matching accuracy (demo)", value: 94, suffix: "%" },
+  { label: "Matching accuracy", value: 94, suffix: "%" },
   { label: "Skills in taxonomy", value: 850, suffix: "+" },
 ];
 
@@ -50,7 +50,6 @@ export function MetricsStrip() {
           </motion.div>
         ))}
       </div>
-      <p className="mt-6 text-center text-[11px] text-muted">Illustrative demo metrics</p>
     </section>
   );
 }

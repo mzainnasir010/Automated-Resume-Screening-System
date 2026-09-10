@@ -14,7 +14,7 @@ interface ThemeContextValue {
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
-const STORAGE_KEY = "screenai-theme";
+const STORAGE_KEY = "candidex-theme";
 
 function getSystemTheme(): Theme {
   if (typeof window === "undefined") return "dark";

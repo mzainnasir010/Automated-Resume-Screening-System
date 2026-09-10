@@ -10,7 +10,7 @@ const Hero3D = dynamic(() => import("./Hero3D").then((m) => m.Hero3D), { ssr: fa
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-[92vh] flex-col items-center justify-center overflow-hidden px-6 pt-20 text-center">
+    <section className="relative flex min-h-[80vh] flex-col items-center justify-center overflow-hidden px-6 pt-10 pb-16 text-center">
       <div className="pointer-events-none absolute inset-0">
         <Hero3D />
         <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/70 to-background" />
@@ -27,12 +27,12 @@ export function Hero() {
           Semantic matching, not keyword matching
         </span>
 
-        <h1 className="mt-6 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-          Screen<span className="text-accent">AI</span>
+        <h1 className="mt-6 font-logo text-5xl font-semibold leading-tight tracking-tight sm:text-6xl">
+          Candid<span className="text-accent">ex</span>
         </h1>
 
         <p className="mt-4 text-lg font-medium text-foreground/90 sm:text-xl">
-          Rank resumes the way a hiring manager would, at the speed of a machine.
+          AI-Powered Resume Screening & Candidate Ranking System
         </p>
 
         <p className="mt-4 max-w-xl text-sm text-muted sm:text-base">

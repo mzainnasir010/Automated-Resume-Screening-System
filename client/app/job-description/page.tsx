@@ -74,7 +74,7 @@ export default function JobDescriptionPage() {
       </div>
 
       <AnimatePresence>
-        {jobDescription && (
+        {jobDescription ? (
           <motion.div
             initial={{ opacity: 0, y: -8, height: 0 }}
             animate={{ opacity: 1, y: 0, height: "auto" }}
@@ -87,17 +87,37 @@ export default function JobDescriptionPage() {
               {jobDescription.required_skills.map((skill) => <Badge key={skill} tone="matched">{skill}</Badge>)}
             </div>
           </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            className="mt-6 rounded-xl border border-border border-dashed bg-surface/50 p-6 text-center text-sm text-muted"
+          >
+            <p><strong className="text-foreground">How it works:</strong> Paste the job description above and click &quot;Extract Skills&quot;.</p>
+            <p className="mt-2">Our AI will analyse the text to identify the core technical skills, tools, and competencies required for the role. These will be used to score and rank your uploaded resumes.</p>
+          </motion.div>
         )}
       </AnimatePresence>
 
       <div className="mt-8 flex items-center justify-between border-t border-border pt-6">
         <Button variant="secondary" onClick={() => router.push("/upload")}>Back</Button>
         <div className="flex items-center gap-3">
-          <Button variant="secondary" disabled={text.length < MIN_CHARS || loading} onClick={handleExtract}>
-            <Sparkles className="h-4 w-4" />
-            {loading ? "Extracting..." : "Extract Skills"}
-          </Button>
-          <Button disabled={!jobDescription} onClick={() => router.push("/results")}>Continue</Button>
+          {!jobDescription ? (
+            <>
+              <span className="hidden text-xs text-muted sm:inline-block">Extract skills to continue</span>
+              <Button disabled={text.length < MIN_CHARS || loading} onClick={handleExtract}>
+                <Sparkles className="h-4 w-4" />
+                {loading ? "Extracting..." : "Extract Skills"}
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="secondary" disabled={text.length < MIN_CHARS || loading} onClick={handleExtract}>
+                <Sparkles className="h-4 w-4" />
+                {loading ? "Extracting..." : "Re-Extract"}
+              </Button>
+              <Button onClick={() => router.push("/results")}>Continue</Button>
+            </>
+          )}
         </div>
       </div>
     </AppShell>

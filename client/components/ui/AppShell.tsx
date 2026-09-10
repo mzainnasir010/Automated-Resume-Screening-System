@@ -18,8 +18,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Menu className="h-5 w-5" />
         </button>
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-accent text-xs font-bold text-white">S</div>
-          <span className="text-sm font-semibold">Screen<span className="text-accent">AI</span></span>
+          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-accent text-xs font-bold text-white">C</div>
+          <span className="text-sm font-semibold font-logo tracking-tight">Candid<span className="text-accent">ex</span></span>
         </Link>
         <ThemeToggle />
       </header>
@@ -43,8 +43,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             >
               <div className="flex items-center justify-between px-2 py-3">
                 <Link href="/" className="flex items-center gap-2">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-sm font-bold text-white">S</div>
-                  <span className="text-sm font-semibold">Screen<span className="text-accent">AI</span></span>
+                  <div className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-sm font-bold text-white">C</div>
+                  <span className="text-sm font-semibold font-logo tracking-tight">Candid<span className="text-accent">ex</span></span>
                 </Link>
                 <button onClick={() => setMobileOpen(false)} className="rounded-lg p-1.5 text-muted hover:bg-surface-hover" aria-label="Close menu">
                   <X className="h-4 w-4" />
@@ -60,25 +60,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </AnimatePresence>
 
       <aside className="sticky top-0 hidden h-screen w-[260px] shrink-0 flex-col border-r border-border p-4 lg:flex">
-        <Link href="/" className="flex items-center gap-2 px-2 py-3">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-sm font-bold text-white">S</div>
-          <span className="text-sm font-semibold">Screen<span className="text-accent">AI</span></span>
-        </Link>
+        <div className="flex items-center justify-between px-2 py-3">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-sm font-bold text-white">C</div>
+            <span className="text-sm font-semibold font-logo tracking-tight">Candid<span className="text-accent">ex</span></span>
+          </Link>
+          <ThemeToggle />
+        </div>
 
         <div className="mt-6 px-2 text-xs font-medium uppercase tracking-wide text-muted">Workflow</div>
         <div className="mt-2">
           <StepIndicator />
-        </div>
-
-        <div className="mt-auto flex items-center justify-between rounded-lg border border-border p-2">
-          <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-surface-hover text-xs font-medium">MZ</div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-xs font-medium">Muhammad Zain</p>
-              <p className="truncate text-xs text-muted">Screening Tool</p>
-            </div>
-          </div>
-          <ThemeToggle />
         </div>
       </aside>
 

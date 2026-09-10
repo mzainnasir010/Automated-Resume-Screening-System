@@ -17,20 +17,26 @@ export function Features() {
   return (
     <section id="features" className="border-y border-border bg-surface/40 py-24">
       <div className="w-full px-6 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-xl text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mx-auto max-w-xl text-center"
+        >
           <h2 className="text-2xl font-semibold sm:text-3xl">Built for how hiring actually works</h2>
           <p className="mt-3 text-sm text-muted sm:text-base">Every score is explainable, not a black box.</p>
-        </div>
+        </motion.div>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f, i) => (
             <motion.div
               key={f.title}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: (i % 3) * 0.08 }}
-              className="rounded-2xl border border-border bg-surface p-6 transition-colors hover:border-accent/40"
+              initial={{ opacity: 0, y: 40, rotateX: -15, transformPerspective: 800 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: (i % 3) * 0.15, ease: "easeOut" }}
+              className="rounded-2xl border border-border bg-surface p-6 transition-all hover:-translate-y-1 hover:border-accent/50 hover:shadow-md"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent">
                 <f.icon className="h-5 w-5" />

@@ -28,20 +28,26 @@ const STEPS = [
 export function HowItWorks() {
   return (
     <section id="how-it-works" className="w-full px-6 sm:px-8 lg:px-12 py-24">
-      <div className="mx-auto max-w-xl text-center">
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="mx-auto max-w-xl text-center"
+      >
         <h2 className="text-2xl font-semibold sm:text-3xl">How it works</h2>
         <p className="mt-3 text-sm text-muted sm:text-base">Three steps from a folder of PDFs to a ranked shortlist.</p>
-      </div>
+      </motion.div>
 
       <div className="mt-14 grid gap-8 sm:grid-cols-3">
         {STEPS.map((step, i) => (
           <motion.div
             key={step.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.12 }}
-            className="relative rounded-2xl border border-border bg-surface p-6"
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: i * 0.2, type: "spring", bounce: 0.2 }}
+            className="relative rounded-2xl border border-border bg-surface p-6 transition-all hover:-translate-y-1 hover:border-accent/50 hover:shadow-md"
           >
             <span className="absolute -top-3 -left-3 flex h-8 w-8 items-center justify-center rounded-full bg-accent text-xs font-semibold text-white">
               {i + 1}

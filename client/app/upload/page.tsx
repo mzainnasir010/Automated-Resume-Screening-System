@@ -65,7 +65,15 @@ export default function UploadPage() {
       <div className="mt-6">
         <p className="mb-2 text-sm font-medium">Files</p>
         {files.length === 0 ? (
-          <EmptyState icon={FolderOpen} title="No files selected" description="Drag and drop PDFs above to get started." />
+          <div className="rounded-xl border border-border border-dashed bg-surface/50 p-8 text-center">
+             <h3 className="mb-2 text-lg font-medium">Getting Started with Candidex</h3>
+             <ul className="mx-auto mt-4 max-w-sm text-left text-sm text-muted space-y-3">
+               <li><strong className="text-foreground">1. Upload Resumes:</strong> Drag & drop multiple PDF resumes here.</li>
+               <li><strong className="text-foreground">2. Add Job Description:</strong> On the next step, paste or upload the job requirements.</li>
+               <li><strong className="text-foreground">3. AI Screening:</strong> Candidex extracts skills and semantically matches candidates.</li>
+               <li><strong className="text-foreground">4. Review Results:</strong> Get an explainable ranked list of the best matches.</li>
+             </ul>
+          </div>
         ) : (
           <div className="max-h-80 overflow-y-auto rounded-xl border border-border bg-surface">
             <AnimatePresence initial={false}>

@@ -177,13 +177,14 @@ Open [http://localhost:3000](http://localhost:3000) in your web browser.
 
 ## 9. Screenshots
 
-*(Note: Add your actual screenshots to the `assets/screenshots/` directory)*
+### File Upload
+![File Upload](assets/screenshots/file%20upload.png)
 
-### Resume Upload & Job Description
-![Resume Upload](assets/screenshots/resume-upload.png)
+### Job Description
+![Job Description](assets/screenshots/job%20description.png)
 
-### Candidate Ranking & Details
-![Candidate Ranking](assets/screenshots/candidate-ranking.png)
+### Ranked Results
+![Ranked Results](assets/screenshots/results.png)
 
 ## 10. Example Results
 

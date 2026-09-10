@@ -11,10 +11,10 @@ export function Navbar() {
       <div className="flex h-16 w-full items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2">
           <div className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-sm font-bold text-white">
-            S
+            C
           </div>
-          <span className="text-sm font-semibold">
-            Screen<span className="text-accent">AI</span>
+          <span className="text-sm font-semibold font-logo tracking-tight">
+            Candid<span className="text-accent">ex</span>
           </span>
         </Link>
 
