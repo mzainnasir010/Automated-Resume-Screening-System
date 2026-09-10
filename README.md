@@ -218,7 +218,7 @@ resume-screening-system/
 └── README.md                   # Project documentation
 ```
 
-## 12. Future Improvements
+## 12. Future Work
 
 - **Better Semantic Matching**: Upgrading to larger LLMs to better understand the nuanced context of candidate achievements rather than just skill mentions.
 - **Experience & Education Extraction**: Parsing specific years of experience and educational degrees to provide more granular filtering for recruiters.
@@ -248,7 +248,10 @@ This system is built as a **decision-support tool, not an autonomous hiring syst
 
 ## 15. Author
 
-**[Your Name]**
+**Muhammad Zain Nasir**
 
-- LinkedIn: [Your LinkedIn URL]()
-- GitHub: [Your GitHub URL]()
+<br />
+
+[![Portfolio](https://img.shields.io/badge/Portfolio-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://muhammad-zain-nasir.vercel.app/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/muhammadin-zain-nasir)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mzainnasir010)
