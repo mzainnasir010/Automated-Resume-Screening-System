@@ -66,7 +66,6 @@ Recruiters often receive hundreds of applications for a single open role. Manual
 ## 5. Architecture
 
 ![Architecture](assets/screenshots/architecture.png)
-*(Note: Please add your architecture diagram to `assets/screenshots/architecture.png`)*
 
 ### Pipeline Walkthrough
 
