@@ -2,7 +2,7 @@ import { CandidateRecord, JobDescriptionResult } from "./types";
 import { MOCK_CANDIDATES, MOCK_JOB_DESCRIPTION } from "./mock-data";
 
 // Flip to false once the FastAPI backend endpoints are live.
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 function delay<T>(value: T, ms = 900): Promise<T> {

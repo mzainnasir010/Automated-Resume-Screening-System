@@ -88,48 +88,57 @@ def run_scoring() -> List[dict]:
     job_text = JOB_DESCRIPTION_STORE["raw_text"]
     required_skills = JOB_DESCRIPTION_STORE["required_skills"]
 
+    ok_candidates = [(cid, rec) for cid, rec in CANDIDATE_STORE.items() if rec["extraction_status"] == "ok"]
+    failed_candidates = [(cid, rec) for cid, rec in CANDIDATE_STORE.items() if rec["extraction_status"] != "ok"]
+
     results = []
-    for candidate_id, record in CANDIDATE_STORE.items():
-        if record["extraction_status"] != "ok":
-            results.append({
-                "candidate_id": candidate_id,
-                "name": record["name"],
-                "source_file": record["source_file"],
-                "extraction_status": record["extraction_status"],
-                "raw_text_chars": record["raw_text_chars"],
-                "skills_found": [],
-                "skills_matched": [],
-                "skills_missing": required_skills,
-                "similarity_raw": 0.0,
-                "match_score": 0.0,
-                "summary": "",
-                "warnings": record["warnings"],
-                "rank": 0,
-            })
-            continue
 
-        similarity = matching.compute_similarity(record["raw_text"], job_text)
-        matched = [s for s in record["skills_found"] if s in required_skills]
-        missing = skills.missing_skills(required_skills, record["skills_found"])
-
-        base_score = matching.normalize_score(similarity)
-        skill_overlap = (len(matched) / len(required_skills) * 100) if required_skills else 0.0
-        final_score = round((base_score * 0.6) + (skill_overlap * 0.4), 1)
-
+    for candidate_id, record in failed_candidates:
         results.append({
             "candidate_id": candidate_id,
             "name": record["name"],
             "source_file": record["source_file"],
             "extraction_status": record["extraction_status"],
             "raw_text_chars": record["raw_text_chars"],
-            "skills_found": record["skills_found"],
-            "skills_matched": matched,
-            "skills_missing": missing,
-            "similarity_raw": round(similarity, 4),
-            "match_score": final_score,
-            "summary": (record["raw_text"][:200].strip() + "...") if record["raw_text"] else "",
+            "skills_found": [],
+            "skills_matched": [],
+            "skills_missing": required_skills,
+            "similarity_raw": 0.0,
+            "match_score": 0.0,
+            "summary": "",
             "warnings": record["warnings"],
             "rank": 0,
         })
+
+    if ok_candidates:
+        texts_to_embed = [job_text] + [rec["raw_text"] for _, rec in ok_candidates]
+        embeddings = matching.embed_texts(texts_to_embed)
+        job_embedding = embeddings[0]
+        resume_embeddings = embeddings[1:]
+
+        for (candidate_id, record), resume_embedding in zip(ok_candidates, resume_embeddings):
+            similarity = matching.similarity_from_embeddings(job_embedding, resume_embedding)
+            matched = [s for s in record["skills_found"] if s in required_skills]
+            missing = skills.missing_skills(required_skills, record["skills_found"])
+
+            base_score = matching.normalize_score(similarity)
+            skill_overlap = (len(matched) / len(required_skills) * 100) if required_skills else 0.0
+            final_score = round((base_score * 0.6) + (skill_overlap * 0.4), 1)
+
+            results.append({
+                "candidate_id": candidate_id,
+                "name": record["name"],
+                "source_file": record["source_file"],
+                "extraction_status": record["extraction_status"],
+                "raw_text_chars": record["raw_text_chars"],
+                "skills_found": record["skills_found"],
+                "skills_matched": matched,
+                "skills_missing": missing,
+                "similarity_raw": round(similarity, 4),
+                "match_score": final_score,
+                "summary": (record["raw_text"][:200].strip() + "...") if record["raw_text"] else "",
+                "warnings": record["warnings"],
+                "rank": 0,
+            })
 
     return ranking.rank_candidates(results)

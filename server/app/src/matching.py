@@ -1,13 +1,8 @@
-"""
-F 06: Candidate Matching
-Computes semantic similarity between a resume and a job description
-using EmbeddingGemma, normalized into a 0 to 100 bounded score.
-"""
-
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
 _model = None
+MAX_CHARS = 3000
 
 
 def get_model():
@@ -17,10 +12,14 @@ def get_model():
     return _model
 
 
-def compute_similarity(resume_text: str, job_text: str) -> float:
+def embed_texts(texts: list[str]):
     model = get_model()
-    embeddings = model.encode([job_text, resume_text], normalize_embeddings=True)
-    score = cosine_similarity([embeddings[0]], [embeddings[1]])[0][0]
+    trimmed = [t[:MAX_CHARS] for t in texts]
+    return model.encode(trimmed, normalize_embeddings=True, batch_size=8)
+
+
+def similarity_from_embeddings(job_embedding, resume_embedding) -> float:
+    score = cosine_similarity([job_embedding], [resume_embedding])[0][0]
     return float(score)
 
 

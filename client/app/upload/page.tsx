@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FolderOpen } from "lucide-react";
 import { AppShell } from "@/components/ui/AppShell";
@@ -9,6 +10,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Button } from "@/components/ui/Button";
 import { useScreening } from "@/lib/store";
 import { UploadedFile } from "@/lib/types";
+import { uploadResumes } from "@/lib/api";
 
 function makeId() {
   return Math.random().toString(36).slice(2);
@@ -17,6 +19,7 @@ function makeId() {
 export default function UploadPage() {
   const router = useRouter();
   const { files, setFiles } = useScreening();
+  const [submitting, setSubmitting] = useState(false);
 
   const handleFilesSelected = (incoming: File[]) => {
     const existingNames = new Set(files.map((f) => f.name));
@@ -36,7 +39,17 @@ export default function UploadPage() {
   };
 
   const handleRemove = (id: string) => setFiles(files.filter((f) => f.id !== id));
-  const readyCount = files.filter((f) => f.status === "ready").length;
+  const readyFiles = files.filter((f) => f.status === "ready");
+
+  const handleContinue = async () => {
+    setSubmitting(true);
+    try {
+      await uploadResumes(readyFiles.map((f) => f.file));
+      router.push("/job-description");
+    } catch {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <AppShell>
@@ -63,8 +76,10 @@ export default function UploadPage() {
       <div className="mt-8 flex items-center justify-between border-t border-border pt-6">
         <Button variant="secondary" onClick={() => router.push("/")}>Cancel</Button>
         <div className="text-right">
-          <Button disabled={readyCount === 0} onClick={() => router.push("/job-description")}>Continue</Button>
-          {readyCount === 0 && <p className="mt-2 text-xs text-muted">Add at least one PDF to continue</p>}
+          <Button disabled={readyFiles.length === 0 || submitting} onClick={handleContinue}>
+            {submitting ? "Uploading..." : "Continue"}
+          </Button>
+          {readyFiles.length === 0 && <p className="mt-2 text-xs text-muted">Add at least one PDF to continue</p>}
         </div>
       </div>
     </AppShell>
