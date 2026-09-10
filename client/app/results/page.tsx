@@ -1,7 +1,9 @@
+// FILE: client/app/results/page.tsx
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { RotateCcw, SearchX } from "lucide-react";
 import { AppShell } from "@/components/ui/AppShell";
 import { CandidateCard } from "@/components/ui/CandidateCard";
@@ -11,6 +13,9 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { useScreening } from "@/lib/store";
 import { getRankedResults } from "@/lib/api";
+
+const gridVariants = { hidden: {}, visible: { transition: { staggerChildren: 0.06 } } };
+const cardVariants = { hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } };
 
 export default function ResultsPage() {
   const router = useRouter();
@@ -66,19 +71,21 @@ export default function ResultsPage() {
         </Button>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <motion.div initial="hidden" animate="visible" variants={gridVariants} className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
           { label: "Total Candidates", value: results.length },
           { label: "Avg Match Score", value: `${avgScore}%` },
           { label: "Strong Matches", value: strongMatches },
           { label: "Partial Matches", value: partialMatches },
         ].map((stat) => (
-          <Card key={stat.label} className="flex h-20 flex-col justify-center px-4">
-            <p className="text-lg font-semibold tabular-nums">{stat.value}</p>
-            <p className="text-xs text-muted">{stat.label}</p>
-          </Card>
+          <motion.div key={stat.label} variants={cardVariants}>
+            <Card className="flex h-20 flex-col justify-center px-4">
+              <p className="text-lg font-semibold tabular-nums">{stat.value}</p>
+              <p className="text-xs text-muted">{stat.label}</p>
+            </Card>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       <div className="mt-4">
         <Toolbar search={search} onSearchChange={setSearch} sort={sort} onSortChange={setSort} minScore={minScore} onMinScoreChange={setMinScore} />
@@ -87,18 +94,18 @@ export default function ResultsPage() {
       <div className="mt-6">
         {loading ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <Card key={i} className="h-52 animate-pulse" />
-            ))}
+            {Array.from({ length: 6 }).map((_, i) => <Card key={i} className="h-52 animate-pulse" />)}
           </div>
         ) : filtered.length === 0 ? (
           <EmptyState icon={SearchX} title="No candidates match your filters" description="Try lowering the minimum score or clearing your search." />
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <motion.div initial="hidden" animate="visible" variants={gridVariants} className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {filtered.map((candidate) => (
-              <CandidateCard key={candidate.candidate_id} candidate={candidate} />
+              <motion.div key={candidate.candidate_id} variants={cardVariants} layout>
+                <CandidateCard candidate={candidate} />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
     </AppShell>

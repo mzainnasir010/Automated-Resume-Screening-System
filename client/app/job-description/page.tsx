@@ -1,7 +1,9 @@
+// FILE: client/app/job-description/page.tsx
 "use client";
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Upload } from "lucide-react";
 import { AppShell } from "@/components/ui/AppShell";
 import { Button } from "@/components/ui/Button";
@@ -31,7 +33,7 @@ export default function JobDescriptionPage() {
 
   const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    e.target.value = ""; // allow re-selecting the same file later
+    e.target.value = "";
     if (!file) return;
 
     setFileError(null);
@@ -56,7 +58,7 @@ export default function JobDescriptionPage() {
         <textarea value={text} onChange={(e) => setText(e.target.value)} rows={10} placeholder="Paste the job description here" className="w-full resize-none bg-transparent text-sm outline-none placeholder:text-muted" />
         <div className="mt-3 flex items-center justify-between border-t border-border pt-3">
           <div className="h-1.5 w-40 overflow-hidden rounded-full bg-surface-hover">
-            <div className="h-full bg-accent transition-all" style={{ width: `${Math.min((text.length / MIN_CHARS) * 100, 100)}%` }} />
+            <motion.div className="h-full bg-accent" animate={{ width: `${Math.min((text.length / MIN_CHARS) * 100, 100)}%` }} transition={{ duration: 0.2 }} />
           </div>
           <span className="text-xs tabular-nums text-muted">{text.length} / {MIN_CHARS}</span>
         </div>
@@ -68,19 +70,25 @@ export default function JobDescriptionPage() {
           <Upload className="h-4 w-4" />
           Upload PDF or .txt instead
         </Button>
-        {fileError && <span className="text-xs text-red-500">{fileError}</span>}
+        {fileError && <span className="text-xs text-danger">{fileError}</span>}
       </div>
 
-      {jobDescription && (
-        <div className="mt-6 rounded-xl border border-border bg-surface p-4">
-          <p className="mb-3 text-sm font-medium">Required skills detected</p>
-          <div className="flex flex-wrap gap-1.5">
-            {jobDescription.required_skills.map((skill) => (
-              <Badge key={skill} tone="matched">{skill}</Badge>
-            ))}
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {jobDescription && (
+          <motion.div
+            initial={{ opacity: 0, y: -8, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: "auto" }}
+            exit={{ opacity: 0, y: -8, height: 0 }}
+            transition={{ duration: 0.25 }}
+            className="mt-6 overflow-hidden rounded-xl border border-border bg-surface p-4"
+          >
+            <p className="mb-3 text-sm font-medium">Required skills detected</p>
+            <div className="flex flex-wrap gap-1.5">
+              {jobDescription.required_skills.map((skill) => <Badge key={skill} tone="matched">{skill}</Badge>)}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="mt-8 flex items-center justify-between border-t border-border pt-6">
         <Button variant="secondary" onClick={() => router.push("/upload")}>Back</Button>

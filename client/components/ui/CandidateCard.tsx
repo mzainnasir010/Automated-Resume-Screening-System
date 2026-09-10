@@ -1,4 +1,4 @@
-// client/components/ui/CandidateCard.tsx
+// FILE: client/components/ui/CandidateCard.tsx
 "use client";
 
 import { useState } from "react";
@@ -20,9 +20,10 @@ export function CandidateCard({ candidate }: { candidate: CandidateRecord }) {
   const matchedOverflow = candidate.skills_matched.length - matchedVisible.length;
   const missingVisible = candidate.skills_missing.slice(0, MAX_VISIBLE_TAGS);
   const missingOverflow = candidate.skills_missing.length - missingVisible.length;
+  const totalSkills = candidate.skills_matched.length + candidate.skills_missing.length;
 
   return (
-    <Card className="flex h-full flex-col p-5">
+    <Card className="flex h-full flex-col p-5 transition-colors hover:border-accent/30">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <span className="text-xs font-medium text-muted">#{candidate.rank}</span>
@@ -36,7 +37,15 @@ export function CandidateCard({ candidate }: { candidate: CandidateRecord }) {
         {failed ? (
           <AlertTriangle className="h-5 w-5 shrink-0 text-danger" />
         ) : (
-          <ScoreRing score={candidate.match_score} />
+          <ScoreRing
+            score={candidate.match_score}
+            breakdown={{
+              baseScore: candidate.similarity_raw * 100,
+              skillOverlap: totalSkills > 0 ? (candidate.skills_matched.length / totalSkills) * 100 : 0,
+              matchedCount: candidate.skills_matched.length,
+              totalSkills,
+            }}
+          />
         )}
       </div>
 
@@ -55,15 +64,11 @@ export function CandidateCard({ candidate }: { candidate: CandidateRecord }) {
 
           <div className="mt-4 flex flex-1 flex-col justify-end gap-2">
             <div className="flex flex-wrap gap-1.5">
-              {matchedVisible.map((skill) => (
-                <Badge key={skill} tone="matched">{skill}</Badge>
-              ))}
+              {matchedVisible.map((skill) => <Badge key={skill} tone="matched">{skill}</Badge>)}
               {matchedOverflow > 0 && <Badge tone="neutral">+{matchedOverflow} more</Badge>}
             </div>
             <div className="flex flex-wrap gap-1.5">
-              {missingVisible.map((skill) => (
-                <Badge key={skill} tone="missing">{skill}</Badge>
-              ))}
+              {missingVisible.map((skill) => <Badge key={skill} tone="missing">{skill}</Badge>)}
               {missingOverflow > 0 && <Badge tone="neutral">+{missingOverflow} more</Badge>}
             </div>
           </div>

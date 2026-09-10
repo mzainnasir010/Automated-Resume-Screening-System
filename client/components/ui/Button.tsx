@@ -1,10 +1,12 @@
-import { ButtonHTMLAttributes, forwardRef } from "react";
+// FILE: client/components/ui/Button.tsx
+import { forwardRef } from "react";
+import { HTMLMotionProps, motion } from "framer-motion";
 import { clsx } from "clsx";
 
 type Variant = "primary" | "secondary" | "ghost";
 type Size = "sm" | "md";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends HTMLMotionProps<"button"> {
   variant?: Variant;
   size?: Size;
 }
@@ -24,9 +26,13 @@ const sizes: Record<Size, string> = {
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "primary", size = "md", ...props }, ref) => (
-    <button
+  ({ className, variant = "primary", size = "md", disabled, ...props }, ref) => (
+    <motion.button
       ref={ref}
+      disabled={disabled}
+      whileHover={disabled ? undefined : { scale: 1.02 }}
+      whileTap={disabled ? undefined : { scale: 0.97 }}
+      transition={{ duration: 0.12 }}
       className={clsx(base, variants[variant], sizes[size], className)}
       {...props}
     />

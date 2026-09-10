@@ -1,7 +1,9 @@
+// FILE: client/app/upload/page.tsx
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import { FolderOpen } from "lucide-react";
 import { AppShell } from "@/components/ui/AppShell";
 import { UploadDropzone } from "@/components/ui/UploadDropzone";
@@ -66,9 +68,19 @@ export default function UploadPage() {
           <EmptyState icon={FolderOpen} title="No files selected" description="Drag and drop PDFs above to get started." />
         ) : (
           <div className="max-h-80 overflow-y-auto rounded-xl border border-border bg-surface">
-            {files.map((f) => (
-              <FileListItem key={f.id} file={f} onRemove={handleRemove} />
-            ))}
+            <AnimatePresence initial={false}>
+              {files.map((f) => (
+                <motion.div
+                  key={f.id}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <FileListItem file={f} onRemove={handleRemove} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         )}
       </div>
