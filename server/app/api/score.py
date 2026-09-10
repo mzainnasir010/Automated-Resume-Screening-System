@@ -18,3 +18,8 @@ async def get_scores():
         return pipeline.run_scoring()
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+@router.post("/reset")
+async def reset_session():
+    pipeline.clear_session()
+    return {"status": "reset"}

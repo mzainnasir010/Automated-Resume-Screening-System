@@ -13,6 +13,7 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { useScreening } from "@/lib/store";
 import { getRankedResults } from "@/lib/api";
+import { resetSession } from "@/lib/api";
 
 const gridVariants = { hidden: {}, visible: { transition: { staggerChildren: 0.06 } } };
 const cardVariants = { hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } };
@@ -53,6 +54,7 @@ export default function ResultsPage() {
 
   const handleNewScreening = () => {
     reset();
+    resetSession();
     router.push("/upload");
   };
 

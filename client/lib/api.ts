@@ -67,3 +67,8 @@ export async function getRankedResults(): Promise<CandidateRecord[]> {
   if (!res.ok) throw new Error("Scoring failed");
   return res.json();
 }
+
+export async function resetSession(): Promise<void> {
+  if (USE_MOCK_DATA) return;
+  await fetch(`${API_BASE_URL}/reset`, { method: "POST" });
+}

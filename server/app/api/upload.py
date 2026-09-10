@@ -15,6 +15,7 @@ ALLOWED_TYPE = "application/pdf"
 
 @router.post("/upload", response_model=UploadResponse)
 async def upload_resumes(files: List[UploadFile] = File(...)):
+    pipeline.clear_session()
     accepted = []
     rejected = []
 

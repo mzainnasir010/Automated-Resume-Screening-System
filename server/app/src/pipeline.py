@@ -217,3 +217,8 @@ def run_scoring() -> List[dict]:
             })
 
     return ranking.rank_candidates(results)
+
+def clear_session():
+    global JOB_DESCRIPTION_STORE
+    CANDIDATE_STORE.clear()
+    JOB_DESCRIPTION_STORE = None
