@@ -1,5 +1,11 @@
 {
-  "_comment": "Canonical skill taxonomy with aliases. Populate during F 04.",
   "python": ["python", "python3"],
-  "javascript": ["javascript", "js", "es6"]
+  "sql": ["sql", "postgresql", "postgres", "mysql", "relational databases"],
+  "pandas": ["pandas"],
+  "docker": ["docker", "containerization"],
+  "aws": ["aws", "amazon web services"],
+  "javascript": ["javascript", "js", "es6"],
+  "machine learning": ["machine learning", "ml"],
+  "tensorflow": ["tensorflow"],
+  "pytorch": ["pytorch"]
 }
