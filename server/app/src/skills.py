@@ -22,9 +22,10 @@ def _build_matcher(nlp):
     global _matcher
     taxonomy = _load_taxonomy()
     matcher = PhraseMatcher(nlp.vocab, attr="LOWER")
-    for canonical, aliases in taxonomy.items():
-        patterns = [nlp.make_doc(alias) for alias in aliases]
-        matcher.add(canonical, patterns)
+    for category, category_skills in taxonomy.items():
+        for canonical, aliases in category_skills.items():
+            patterns = [nlp.make_doc(alias) for alias in aliases]
+            matcher.add(canonical, patterns)
     _matcher = matcher
     return matcher
 

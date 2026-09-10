@@ -40,6 +40,25 @@ export async function submitJobDescription(
   return res.json();
 }
 
+export async function submitJobDescriptionFile(
+  file: File
+): Promise<JobDescriptionResult> {
+  if (USE_MOCK_DATA) {
+    return delay(MOCK_JOB_DESCRIPTION, 1200);
+  }
+  const formData = new FormData();
+  formData.append("file", file);
+  const res = await fetch(`${API_BASE_URL}/job-description/upload`, {
+    method: "POST",
+    body: formData,
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    throw new Error(body?.detail ?? "Job description file processing failed");
+  }
+  return res.json();
+}
+
 export async function getRankedResults(): Promise<CandidateRecord[]> {
   if (USE_MOCK_DATA) {
     return delay(MOCK_CANDIDATES, 1500);

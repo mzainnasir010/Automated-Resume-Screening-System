@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Upload } from "lucide-react";
 import { AppShell } from "@/components/ui/AppShell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { useScreening } from "@/lib/store";
-import { submitJobDescription } from "@/lib/api";
+import { submitJobDescription, submitJobDescriptionFile } from "@/lib/api";
 
 const MIN_CHARS = 100;
 
@@ -16,6 +16,8 @@ export default function JobDescriptionPage() {
   const { jobDescription, setJobDescription } = useScreening();
   const [text, setText] = useState(jobDescription?.raw_text ?? "");
   const [loading, setLoading] = useState(false);
+  const [fileError, setFileError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleExtract = async () => {
     setLoading(true);
@@ -27,10 +29,28 @@ export default function JobDescriptionPage() {
     }
   };
 
+  const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-selecting the same file later
+    if (!file) return;
+
+    setFileError(null);
+    setLoading(true);
+    try {
+      const result = await submitJobDescriptionFile(file);
+      setText(result.raw_text);
+      setJobDescription(result);
+    } catch (err) {
+      setFileError(err instanceof Error ? err.message : "Could not process this file");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <AppShell>
       <h1 className="text-xl font-semibold">Job Description</h1>
-      <p className="mt-1 text-sm text-muted">Paste the full job description, we extract the required skills.</p>
+      <p className="mt-1 text-sm text-muted">Paste the full job description, or upload it as a PDF or text file, we extract the required skills.</p>
 
       <div className="mt-6 rounded-xl border border-border bg-surface p-4">
         <textarea value={text} onChange={(e) => setText(e.target.value)} rows={10} placeholder="Paste the job description here" className="w-full resize-none bg-transparent text-sm outline-none placeholder:text-muted" />
@@ -40,6 +60,15 @@ export default function JobDescriptionPage() {
           </div>
           <span className="text-xs tabular-nums text-muted">{text.length} / {MIN_CHARS}</span>
         </div>
+      </div>
+
+      <div className="mt-4 flex items-center gap-3">
+        <input ref={fileInputRef} type="file" accept=".pdf,.txt,application/pdf,text/plain" className="hidden" onChange={handleFileSelected} />
+        <Button variant="secondary" disabled={loading} onClick={() => fileInputRef.current?.click()}>
+          <Upload className="h-4 w-4" />
+          Upload PDF or .txt instead
+        </Button>
+        {fileError && <span className="text-xs text-red-500">{fileError}</span>}
       </div>
 
       {jobDescription && (

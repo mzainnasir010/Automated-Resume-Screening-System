@@ -11,7 +11,7 @@ import uuid
 from typing import Dict, List, Optional
 
 from app.src import extraction, skills, matching, ranking
-from app.src.preprocessing import get_nlp
+from app.src.preprocessing import get_nlp, clean_text
 
 CANDIDATE_STORE: Dict[str, dict] = {}
 JOB_DESCRIPTION_STORE: Optional[dict] = None
@@ -23,6 +23,17 @@ def new_candidate_id() -> str:
 def process_resume(candidate_id: str, filename: str, file_bytes: bytes) -> dict:
     nlp = get_nlp()
     raw_text, status = extraction.extract_text_from_pdf(file_bytes)
+
+    # F-03: normalize whitespace and bullet glyphs before anything downstream
+    # sees this text. We deliberately stop at clean_text() here rather than
+    # running the full tokenize/lemmatize/stopword-removal pipeline
+    # (preprocessing.preprocess()) on the text that feeds skill matching and
+    # embeddings: that fuller pass fragments technical tokens the brief asks
+    # us to preserve (e.g. "CI/CD" -> "ci cd"), and lemmatized, stopword-
+    # stripped text also degrades the sentence-transformer embeddings, which
+    # expect natural phrasing. preprocess() is still available/documented
+    # for anyone who wants a bag-of-lemmas view of the text.
+    raw_text = clean_text(raw_text)
 
     record = {
         "candidate_id": candidate_id,
@@ -66,6 +77,7 @@ def extract_job_title(text: str) -> str:
 def process_job_description(text: str) -> dict:
     global JOB_DESCRIPTION_STORE
     nlp = get_nlp()
+    text = clean_text(text)  # F-03: identical normalization path as resumes
     required = skills.extract_skills(text, nlp)
 
     result = {
