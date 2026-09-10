@@ -1,4 +1,3 @@
-// FILE: client/components/ui/CandidateCard.tsx
 "use client";
 
 import { useState } from "react";
@@ -8,7 +7,7 @@ import { clsx } from "clsx";
 import { CandidateRecord } from "@/lib/types";
 import { Card } from "./Card";
 import { Badge } from "./Badge";
-import { ScoreRing } from "./ScoreRing";
+import { ScoreMeter } from "./ScoreMeter";
 
 const MAX_VISIBLE_TAGS = 4;
 
@@ -26,18 +25,17 @@ export function CandidateCard({ candidate }: { candidate: CandidateRecord }) {
     <Card className="flex h-full flex-col p-5 transition-colors hover:border-accent/30">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <span className="text-xs font-medium text-muted">#{candidate.rank}</span>
+          <span className="text-xs font-medium text-muted">Rank #{candidate.rank}</span>
           <p className="mt-1 truncate text-sm font-semibold">{candidate.name}</p>
-          {candidate.name_source === "filename" ? (
-            <p className="truncate text-xs text-muted">Name not detected, showing filename</p>
-          ) : (
-            <p className="truncate text-xs text-muted">{candidate.source_file}</p>
-          )}
+          <p className="truncate text-xs text-muted">
+            {candidate.name_source === "filename" ? "Name not detected, showing filename" : candidate.source_file}
+          </p>
         </div>
+
         {failed ? (
           <AlertTriangle className="h-5 w-5 shrink-0 text-danger" />
         ) : (
-          <ScoreRing
+          <ScoreMeter
             score={candidate.match_score}
             breakdown={{
               baseScore: candidate.similarity_raw * 100,
@@ -62,14 +60,22 @@ export function CandidateCard({ candidate }: { candidate: CandidateRecord }) {
             </button>
           )}
 
-          <div className="mt-4 flex flex-1 flex-col justify-end gap-2">
-            <div className="flex flex-wrap gap-1.5">
-              {matchedVisible.map((skill) => <Badge key={skill} tone="matched">{skill}</Badge>)}
-              {matchedOverflow > 0 && <Badge tone="neutral">+{matchedOverflow} more</Badge>}
+          <div className="mt-4 flex flex-1 flex-col justify-end gap-3 border-t border-border pt-3">
+            <div>
+              <p className="mb-1.5 text-xs font-medium text-muted">Matched ({candidate.skills_matched.length})</p>
+              <div className="flex flex-wrap gap-1.5">
+                {matchedVisible.map((skill) => <Badge key={skill} tone="matched">{skill}</Badge>)}
+                {matchedOverflow > 0 && <Badge tone="neutral">+{matchedOverflow} more</Badge>}
+                {candidate.skills_matched.length === 0 && <span className="text-xs text-muted">None</span>}
+              </div>
             </div>
-            <div className="flex flex-wrap gap-1.5">
-              {missingVisible.map((skill) => <Badge key={skill} tone="missing">{skill}</Badge>)}
-              {missingOverflow > 0 && <Badge tone="neutral">+{missingOverflow} more</Badge>}
+            <div>
+              <p className="mb-1.5 text-xs font-medium text-muted">Missing ({candidate.skills_missing.length})</p>
+              <div className="flex flex-wrap gap-1.5">
+                {missingVisible.map((skill) => <Badge key={skill} tone="missing">{skill}</Badge>)}
+                {missingOverflow > 0 && <Badge tone="neutral">+{missingOverflow} more</Badge>}
+                {candidate.skills_missing.length === 0 && <span className="text-xs text-muted">None</span>}
+              </div>
             </div>
           </div>
         </>
