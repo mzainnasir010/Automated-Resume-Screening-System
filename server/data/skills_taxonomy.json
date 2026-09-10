@@ -1,0 +1,5 @@
+{
+  "_comment": "Canonical skill taxonomy with aliases. Populate during F 04.",
+  "python": ["python", "python3"],
+  "javascript": ["javascript", "js", "es6"]
+}
