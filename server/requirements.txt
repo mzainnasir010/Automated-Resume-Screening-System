@@ -12,3 +12,4 @@ python-multipart
 pydantic
 pytest
 python-dotenv
+spaces
