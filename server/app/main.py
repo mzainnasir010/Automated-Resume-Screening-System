@@ -42,5 +42,5 @@ def _zerogpu_probe():
 ui = gr.Blocks()
 with ui:
     gr.Markdown("# Resume Screening Backend\nAPI only. See `/docs` for endpoints.")
-
-gr.mount_gradio_app(demo, ui, path="/")
+    probe_output = gr.Textbox(visible=False)
+    ui.load(fn=_zerogpu_probe, outputs=probe_output)
