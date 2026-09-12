@@ -1,5 +1,6 @@
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+import spaces
 
 _model = None
 MAX_CHARS = 3000
@@ -12,6 +13,7 @@ def get_model():
     return _model
 
 
+@spaces.GPU
 def embed_texts(texts: list[str]):
     model = get_model()
     trimmed = [t[:MAX_CHARS] for t in texts]
