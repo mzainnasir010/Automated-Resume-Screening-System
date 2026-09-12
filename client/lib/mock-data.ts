@@ -12,6 +12,7 @@ export const MOCK_CANDIDATES: CandidateRecord[] = [
   {
     candidate_id: "cand_001",
     name: "D. Johnson",
+    name_source: "extracted",
     source_file: "D_Johnson_CV.pdf",
     extraction_status: "ok",
     raw_text_chars: 5210,
@@ -28,6 +29,7 @@ export const MOCK_CANDIDATES: CandidateRecord[] = [
   {
     candidate_id: "cand_002",
     name: "A. Rahman",
+    name_source: "extracted",
     source_file: "resume_001.pdf",
     extraction_status: "ok",
     raw_text_chars: 4821,
@@ -44,6 +46,7 @@ export const MOCK_CANDIDATES: CandidateRecord[] = [
   {
     candidate_id: "cand_003",
     name: "J. Smith",
+    name_source: "extracted",
     source_file: "J_Smith_Resume_Final.pdf",
     extraction_status: "ok",
     raw_text_chars: 3980,
@@ -60,6 +63,7 @@ export const MOCK_CANDIDATES: CandidateRecord[] = [
   {
     candidate_id: "cand_004",
     name: "M. Garcia",
+    name_source: "extracted",
     source_file: "MG_Data_Analyst.pdf",
     extraction_status: "ok",
     raw_text_chars: 4102,
@@ -76,6 +80,7 @@ export const MOCK_CANDIDATES: CandidateRecord[] = [
   {
     candidate_id: "cand_005",
     name: "K. Williams",
+    name_source: "extracted",
     source_file: "Williams_K.pdf",
     extraction_status: "ok",
     raw_text_chars: 2890,
@@ -92,6 +97,7 @@ export const MOCK_CANDIDATES: CandidateRecord[] = [
   {
     candidate_id: "cand_006",
     name: "R. Patel",
+    name_source: "extracted",
     source_file: "RPatel.pdf",
     extraction_status: "ok",
     raw_text_chars: 1560,
@@ -108,6 +114,7 @@ export const MOCK_CANDIDATES: CandidateRecord[] = [
   {
     candidate_id: "cand_007",
     name: "scan_00412",
+    name_source: "filename",
     source_file: "scan_00412.pdf",
     extraction_status: "empty_text",
     raw_text_chars: 0,
@@ -123,6 +130,7 @@ export const MOCK_CANDIDATES: CandidateRecord[] = [
   {
     candidate_id: "cand_008",
     name: "SLee_Resume",
+    name_source: "filename",
     source_file: "SLee_Resume.pdf",
     extraction_status: "parse_error",
     raw_text_chars: 0,
