@@ -46,7 +46,3 @@ with ui:
 
 gr.mount_gradio_app(demo, ui, path="/")
 
-if __name__ == "__main__":
-    import os
-    os.environ.pop("GRADIO_SERVER_PORT", None)
-    demo.launch(ssr_mode=False)
