@@ -46,3 +46,17 @@ with ui:
 
 gr.mount_gradio_app(demo, ui, path="/")
 
+def _zerogpu_startup():
+    try:
+        from spaces.zero import startup as zero_startup
+        zero_startup()
+        print("zerogpu: startup report sent", flush=True)
+    except ImportError:
+        pass
+    except Exception as e:
+        print(f"[zerogpu] startup report failed: {e}", flush=True)
+
+
+if __name__ == "__main__":
+    _zerogpu_startup()
+
