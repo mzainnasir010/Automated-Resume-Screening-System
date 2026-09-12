@@ -64,7 +64,7 @@ export default function JobDescriptionPage() {
         </div>
       </div>
 
-      <div className="mt-4 flex items-center gap-3">
+      <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-3">
         <input ref={fileInputRef} type="file" accept=".pdf,.txt,application/pdf,text/plain" className="hidden" onChange={handleFileSelected} />
         <Button variant="secondary" disabled={loading} onClick={() => fileInputRef.current?.click()}>
           <Upload className="h-4 w-4" />

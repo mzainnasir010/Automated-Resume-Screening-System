@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { RotateCcw, SearchX, FilePlus2 } from "lucide-react";
+import { RotateCcw, SearchX, FilePlus2, Loader2 } from "lucide-react";
 import { AppShell } from "@/components/ui/AppShell";
 import { CandidateCard } from "@/components/ui/CandidateCard";
 import { Toolbar } from "@/components/ui/Toolbar";
@@ -144,8 +144,20 @@ export default function ResultsPage() {
 
       <div className="mt-6">
         {loading ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => <Card key={i} className="h-52 animate-pulse" />)}
+          <div className="flex flex-col gap-6 mt-2">
+            <div className="flex justify-center">
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="inline-flex items-center gap-2.5 rounded-full border border-border bg-surface px-5 py-2.5 text-sm font-medium text-foreground shadow-sm"
+              >
+                <Loader2 className="h-4 w-4 animate-spin text-accent" />
+                <span>Calculating results... Please don't switch tabs</span>
+              </motion.div>
+            </div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {Array.from({ length: Math.min(12, Math.max(1, files.length)) }).map((_, i) => <Card key={i} className="h-52 animate-pulse" />)}
+            </div>
           </div>
         ) : filtered.length === 0 ? (
           <EmptyState icon={SearchX} title="No candidates match your filters" description="Try lowering the minimum score or clearing your search." />

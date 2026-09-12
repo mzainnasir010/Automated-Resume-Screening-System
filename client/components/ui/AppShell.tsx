@@ -14,14 +14,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background text-foreground lg:flex">
       <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-border bg-background/80 px-4 backdrop-blur lg:hidden">
-        <button onClick={() => setMobileOpen(true)} className="rounded-lg p-2 text-muted hover:bg-surface-hover" aria-label="Open menu">
-          <Menu className="h-5 w-5" />
-        </button>
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-accent text-xs font-bold text-white">C</div>
-          <span className="text-sm font-semibold font-logo tracking-tight">Candid<span className="text-accent">ex</span></span>
-        </Link>
-        <ThemeToggle />
+        <div className="flex w-1/3 justify-start">
+          <button onClick={() => setMobileOpen(true)} className="rounded-lg p-2 -ml-2 text-muted hover:bg-surface-hover" aria-label="Open menu">
+            <Menu className="h-5 w-5" />
+          </button>
+        </div>
+        <div className="flex w-1/3 justify-center">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-accent text-xs font-bold text-white">C</div>
+            <span className="text-sm font-semibold font-logo tracking-tight">Candid<span className="text-accent">ex</span></span>
+          </Link>
+        </div>
+        <div className="flex w-1/3 justify-end">
+          <ThemeToggle />
+        </div>
       </header>
 
       <AnimatePresence>
@@ -74,8 +80,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto">
-        <div className="w-full px-18 py-8 lg:px-8 lg:py-10">{children}</div>
+      <main className="flex-1 overflow-y-auto w-full">
+        <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">{children}</div>
       </main>
     </div>
   );

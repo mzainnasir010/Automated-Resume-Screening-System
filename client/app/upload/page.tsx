@@ -93,7 +93,7 @@ export default function UploadPage() {
         )}
       </div>
 
-      <div className="mt-8 flex items-center justify-between border-t border-border pt-6">
+      <div className="mt-8 flex items-start justify-between border-t border-border pt-6">
         <Button variant="secondary" onClick={() => router.push("/")}>Cancel</Button>
         <div className="text-right">
           <Button disabled={readyFiles.length === 0 || submitting} onClick={handleContinue}>
