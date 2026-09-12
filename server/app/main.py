@@ -1,21 +1,36 @@
 """
-FastAPI (gradio.Server) entry point. Wires up the API routes.
-Hugging Face Spaces (Gradio SDK) imports this file and launches
-the `demo` object itself, so there is no manual launch call here.
+FastAPI + Gradio entry point for Hugging Face Spaces.
+
+The FastAPI application provides the resume screening API routes.
+Gradio provides the Space UI and ZeroGPU integration.
 """
 
 import os
+
 from dotenv import load_dotenv
 from gradio import Server
 import gradio as gr
 import spaces
+
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.api import upload, job_description, score
 
+
 load_dotenv()
-FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+
+FRONTEND_URL = os.environ.get(
+    "FRONTEND_URL",
+    "http://localhost:3000"
+)
+
+
+# --------------------------------------------------
+# FastAPI application
+# --------------------------------------------------
 
 demo = Server()
+
 
 demo.add_middleware(
     CORSMiddleware,
@@ -24,6 +39,8 @@ demo.add_middleware(
     allow_headers=["*"],
 )
 
+
+# API routes
 demo.include_router(upload.router)
 demo.include_router(job_description.router)
 demo.include_router(score.router)
@@ -31,32 +48,59 @@ demo.include_router(score.router)
 
 @demo.get("/health")
 def health():
-    return {"status": "ok", "message": "Resume screening backend is running"}
+    return {
+        "status": "ok",
+        "message": "Resume screening backend is running"
+    }
 
+
+# --------------------------------------------------
+# ZeroGPU function
+# --------------------------------------------------
 
 @spaces.GPU
 def _zerogpu_probe():
     return "ok"
 
+
+# --------------------------------------------------
+# Gradio UI
+# --------------------------------------------------
+
 ui = gr.Blocks()
+
 with ui:
-    gr.Markdown("# Resume Screening Backend\nAPI only. See `/docs` for endpoints.")
+    gr.Markdown(
+        "# Resume Screening Backend\n"
+        "API only. See `/docs` for endpoints."
+    )
+
     probe_output = gr.Textbox(visible=False)
-    ui.load(fn=_zerogpu_probe, outputs=probe_output)
 
-gr.mount_gradio_app(demo, ui, path="/")
+    ui.load(
+        fn=_zerogpu_probe,
+        outputs=probe_output
+    )
 
-def _zerogpu_startup():
-    try:
-        from spaces.zero import startup as zero_startup
-        zero_startup()
-        print("zerogpu: startup report sent", flush=True)
-    except ImportError:
-        pass
-    except Exception as e:
-        print(f"[zerogpu] startup report failed: {e}", flush=True)
 
+# --------------------------------------------------
+# Mount Gradio into FastAPI
+# --------------------------------------------------
+
+app = gr.mount_gradio_app(
+    demo,
+    ui,
+    path="/"
+)
+
+
+# --------------------------------------------------
+# Hugging Face / ZeroGPU startup
+# --------------------------------------------------
 
 if __name__ == "__main__":
-    _zerogpu_startup()
-
+    app.launch(
+        server_name="0.0.0.0",
+        server_port=7860,
+        show_error=True
+    )
