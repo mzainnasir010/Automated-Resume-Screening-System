@@ -2,7 +2,7 @@
 
 An AI-powered recruitment assistant that analyses resumes against a job description and ranks candidates by relevance.
 
-**Live Demo:** [Add your live URL here]()
+**Live Demo:** [Candidex](https://candidex-automated-resume-screening-system.vercel.app/)
 
 ## 1. Project Overview
 
