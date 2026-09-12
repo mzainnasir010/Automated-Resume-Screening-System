@@ -38,9 +38,13 @@ def health():
 def _zerogpu_probe():
     return "ok"
 
-
 ui = gr.Blocks()
 with ui:
     gr.Markdown("# Resume Screening Backend\nAPI only. See `/docs` for endpoints.")
     probe_output = gr.Textbox(visible=False)
     ui.load(fn=_zerogpu_probe, outputs=probe_output)
+
+gr.mount_gradio_app(demo, ui, path="/")
+
+if __name__ == "__main__":
+    demo.launch(server_name="0.0.0.0", server_port=7860, ssr_mode=False)
