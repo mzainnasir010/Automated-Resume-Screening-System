@@ -2,7 +2,7 @@ fastapi
 gradio
 uvicorn
 pymupdf
-spacy
+spacy==3.7.5
 scikit-learn
 sentence-transformers
 rapidfuzz
@@ -13,3 +13,4 @@ pydantic
 pytest
 python-dotenv
 spaces
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
