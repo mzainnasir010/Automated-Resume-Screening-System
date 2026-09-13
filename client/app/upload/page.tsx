@@ -67,7 +67,7 @@ export default function UploadPage() {
         {files.length === 0 ? (
           <div className="rounded-xl border border-border border-dashed bg-surface/50 p-8 text-center">
              <h3 className="mb-2 text-lg font-medium">Getting Started with Candidex</h3>
-             <ul className="mx-auto mt-4 max-w-sm text-left text-sm text-muted space-y-3">
+             <ul className="mx-auto mt-4 w-full text-left text-sm text-muted space-y-3">
                <li><strong className="text-foreground">1. Upload Resumes:</strong> Drag & drop multiple PDF resumes here.</li>
                <li><strong className="text-foreground">2. Add Job Description:</strong> On the next step, paste or upload the job requirements.</li>
                <li><strong className="text-foreground">3. AI Screening:</strong> Candidex extracts skills and semantically matches candidates.</li>
